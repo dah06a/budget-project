@@ -1,6 +1,21 @@
 import React, { useContext, useState } from 'react';
+import { v4 as uuidV4 } from 'uuid';
 
 const BudgetsContext = React.createContext();
+
+
+// {
+//     id:
+//     name:
+//     max:
+// }
+
+// {
+//     id:
+//     budgetId:
+//     amount:
+//     description:
+// }
 
 
 export function useBudgets() {
@@ -12,24 +27,37 @@ export const BudgetsProvider = ({ children }) => {
     const [budgets, setBudgets] = useState([]);
     const [expenses, setExpenses] = useState([]);
 
-    function getBudgetExpenses() {
-        
+    function getBudgetExpenses(budgetId) {
+        return expenses.filter(expense => expense.budgetId === budgetId);
     }
 
-    function addExpense() {
-        
+    function addExpense({ description, amount, budgetId }) {
+        setExpenses(prevExpenses => {
+            return [...prevExpenses, { id: uuidV4(), description, amount, budgetId }];
+        });
     }
 
-    function AddBudget() {
-        
+    function AddBudget({ name, max }) {
+        setBudgets(prevBudgets => {
+            if (prevBudgets.find(budget => budget.name === name)) {
+                alert('You must add a budget with a unique name.');
+                return prevBudgets;
+            }
+            return [...prevBudgets, { id: uuidV4(), name, max }];
+        });
     }
 
-    function deleteBudget() {
-        
+    function deleteBudget({ id }) {
+        // TODO: Deal with uncategorized expenses
+        setBudgets(prevBudgets => {
+            return prevBudgets.filter(budget => budget.id !== id);
+        });
     }
 
-    function deleteExpense() {
-        
+    function deleteExpense({ id }) {
+        setExpenses(prevExpenses => {
+            return prevExpenses.filter(expense => expense.id !== id);
+        });
     }
 
     return (
