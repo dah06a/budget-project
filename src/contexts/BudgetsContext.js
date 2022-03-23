@@ -38,7 +38,7 @@ export const BudgetsProvider = ({ children }) => {
         });
     }
 
-    function AddBudget({ name, max }) {
+    function addBudget({ name, max }) {
         setBudgets(prevBudgets => {
             if (prevBudgets.find(budget => budget.name === name)) {
                 alert('You must add a budget with a unique name.');
@@ -67,7 +67,7 @@ export const BudgetsProvider = ({ children }) => {
             expenses,
             getBudgetExpenses,
             addExpense,
-            AddBudget,
+            addBudget,
             deleteBudget,
             deleteExpense
         }}>{children}</BudgetsContext.Provider>
