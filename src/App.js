@@ -7,12 +7,14 @@ import UncategorizedBudgetCard from './components/UncategorizedBudgetCard';
 import TotalBudgetCard from './components/TotalBudgetCard';
 import AddBudgetModal from './components/AddBudgetModal';
 import AddExpenseModal from './components/AddExpenseModal';
-import { useBudgets } from './contexts/BudgetsContext';
+import ViewExpensesModal from './components/ViewExpensesModal';
+import { UNCATEGORIZED_BUDGET_ID, useBudgets } from './contexts/BudgetsContext';
 
 function App() {
 	const [showAddBudgetModal, setShowAddBudgetModal] = useState(false);
 	const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
 	const [addExpenseModalBudgetId, setAddExpenseModalBudgetId] = useState();
+	const [viewExpensesModalBudgetId, setViewExpensesModalBudgetId] = useState();
 	const { budgets, getBudgetExpenses } = useBudgets();
 
 	function openAddExpenseModal(budgetId) {
@@ -24,6 +26,7 @@ function App() {
 		<Container>
 			<AddBudgetModal show={showAddBudgetModal} handleClose={() => setShowAddBudgetModal(false)} />
 			<AddExpenseModal show={showAddExpenseModal} handleClose={() => setShowAddExpenseModal(false)} defaultBudgetId={addExpenseModalBudgetId} />
+			<ViewExpensesModal budgetId={viewExpensesModalBudgetId} handleClose={() => setViewExpensesModalBudgetId()} />
 			
 			<Stack direction='horizontal' gap='2' className='mb-4'>
 				<h1 className='me-auto'>Budgets</h1>
@@ -41,10 +44,14 @@ function App() {
 							amount={amount} 
 							max={budget.max} 
 							onAddExpenseClick={() => openAddExpenseModal(budget.id)}
+							onViewExpensesClick={() => setViewExpensesModalBudgetId(budget.id)}
 						/>
 					);
 				})}
-				<UncategorizedBudgetCard onAddExpenseClick={openAddExpenseModal} />
+				<UncategorizedBudgetCard 
+					onAddExpenseClick={openAddExpenseModal} 
+					onViewExpensesClick={() => setViewExpensesModalBudgetId(UNCATEGORIZED_BUDGET_ID)}
+				/>
 				<TotalBudgetCard />
 			</div>
 		</Container>
